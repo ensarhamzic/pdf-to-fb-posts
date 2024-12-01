@@ -119,5 +119,5 @@ package-lock.json
 
 # Custom
 .idea/*
-src/images/*
-src/pdfs/*
+images/*
+pdfs/*
