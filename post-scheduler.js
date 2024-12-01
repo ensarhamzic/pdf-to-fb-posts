@@ -1,6 +1,8 @@
 import axios from 'axios';
 import * as dotenv from 'dotenv';
 import fs from 'node:fs';
+import path from 'node:path';
+import pdf from 'pdf-poppler';
 import FormData from 'form-data';
 
 dotenv.config();
@@ -8,13 +10,53 @@ dotenv.config();
 const PAGE_ACCESS_TOKEN = process.env.PAGE_ACCESS_TOKEN;
 const PAGE_ID = process.env.PAGE_ID;
 const SCHEDULE_TIME = Math.floor(new Date().getTime() / 1000) + 600;
-const IMAGES = [
-    './images/img.png',
-    './images/img_1.png',
-    './images/img_2.png',
-    './images/img_3.png',
-    './images/img_4.png',
-];
+const PDF_PATH = process.env.PDF_PATH;
+const OUTPUT_DIR = './images';
+const START_PAGE = 10;
+const END_PAGE = 13;
+
+async function extractImagesFromPDF(pdfPath, outputDir, startPage, endPage) {
+    if (!fs.existsSync(pdfPath)) {
+        throw new Error(`File not found: ${pdfPath}`);
+    }
+
+    if (fs.existsSync(outputDir)) {
+        fs.readdirSync(outputDir).forEach((file) => {
+            fs.unlinkSync(path.join(outputDir, file));
+        });
+        console.log(`Cleared directory: ${outputDir}`);
+    } else {
+        fs.mkdirSync(outputDir);
+        console.log(`Created directory: ${outputDir}`);
+    }
+
+    console.log(`Extracting pages ${startPage} to ${endPage} with high quality...`);
+
+    const opts = {
+        format: 'jpeg',
+        out_dir: outputDir,
+        out_prefix: path.basename(pdfPath, path.extname(pdfPath)),
+        scale: 4096
+    };
+
+    const imagePaths = [];
+
+    for (let page = startPage; page <= endPage; page++) {
+        opts.page = page;
+        try {
+            await pdf.convert(pdfPath, opts);
+            const imagePath = path.join(
+                outputDir,
+                `${opts.out_prefix}-${page}.jpg`
+            );
+            imagePaths.push(imagePath);
+        } catch (error) {
+            console.error(`Error converting page ${page}:`, error);
+        }
+    }
+
+    return imagePaths;
+}
 
 async function uploadPhoto(photoPath) {
     if (!fs.existsSync(photoPath)) {
@@ -26,7 +68,7 @@ async function uploadPhoto(photoPath) {
     const formData = new FormData();
     formData.append('source', fs.createReadStream(photoPath), {
         filename: photoPath.split('/').pop(),
-        contentType: 'image/png',
+        contentType: 'image/jpeg',
     });
     formData.append('published', 'false');
 
@@ -51,8 +93,15 @@ async function uploadPhoto(photoPath) {
 
 async function schedulePostWithImages() {
     try {
+        const imagePaths = await extractImagesFromPDF(
+            PDF_PATH,
+            OUTPUT_DIR,
+            START_PAGE,
+            END_PAGE
+        );
+
         const photoIds = await Promise.all(
-            IMAGES.map((photoPath) => uploadPhoto(photoPath))
+            imagePaths.map((photoPath) => uploadPhoto(photoPath))
         );
 
         const url = `https://graph.facebook.com/v17.0/${PAGE_ID}/feed`;
@@ -60,7 +109,7 @@ async function schedulePostWithImages() {
         const attachedMedia = photoIds.map((id) => ({media_fbid: id}));
 
         const data = {
-            message: 'Ovo je post sa 5 slika',
+            message: 'Post generated from PDF pages 5-15',
             attached_media: attachedMedia,
             published: false,
             scheduled_publish_time: SCHEDULE_TIME,
