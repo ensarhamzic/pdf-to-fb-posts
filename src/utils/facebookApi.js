@@ -1,7 +1,7 @@
 import fs from 'fs';
 import axios from 'axios';
 import FormData from 'form-data';
-import {PAGE_ACCESS_TOKEN, PAGE_ID} from '../config.js';
+import {PAGE_ACCESS_TOKEN, PAGE_ID} from '../infrastructure/variables.js';
 
 export async function uploadPhoto(photoPath) {
     if (!fs.existsSync(photoPath)) {

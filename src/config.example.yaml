@@ -1,0 +1,14 @@
+PAGE_ACCESS_TOKEN: "your_page_access_token"
+PAGE_ID: "your_page_id"
+PDF_URL: "https://example.com/sample.pdf"
+IMAGES_DIR: "./src/images"
+PDF_DIR: "./src/pdfs"
+SCHEDULE_CONFIG:
+  - startPage: 1
+    endPage: 5
+    message: "Message 1"
+    scheduleTime: 1672531200
+  - startPage: 6
+    endPage: 10
+    message: "Message 2"
+    scheduleTime: 1672534800

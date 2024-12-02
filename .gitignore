@@ -121,3 +121,4 @@ package-lock.json
 .idea/*
 src/images/*
 src/pdfs/*
+config.yaml
