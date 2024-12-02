@@ -8,7 +8,7 @@ export async function uploadPhoto(photoPath) {
         throw new Error(`File not found: ${photoPath}`);
     }
 
-    const url = `https://graph.facebook.com/v17.0/${PAGE_ID}/photos`;
+    const url = `https://graph.facebook.com/v21.0/${PAGE_ID}/photos`;
 
     const formData = new FormData();
     formData.append('source', fs.createReadStream(photoPath), {
@@ -37,7 +37,7 @@ export async function uploadPhoto(photoPath) {
 }
 
 export async function schedulePostWithImages(message, photoIds, scheduleTime) {
-    const url = `https://graph.facebook.com/v17.0/${PAGE_ID}/feed`;
+    const url = `https://graph.facebook.com/v21.0/${PAGE_ID}/feed`;
 
     const data = {
         message,
