@@ -10,9 +10,9 @@ import fs from 'node:fs';
         await downloadPdf(PDF_URL, localPDFPath);
 
         for (const config of SCHEDULE_CONFIG) {
-            const {startPage, endPage, message, scheduleTime} = config;
+            const {startPage, endPage, message, dateTime} = config;
 
-            const scheduleTimestamp = Math.floor(new Date(scheduleTime).getTime() / 1000);
+            const scheduleTimestamp = Math.floor(new Date(dateTime).getTime() / 1000);
 
             await extractImagesFromPdf(localPDFPath, IMAGES_DIR, startPage, endPage);
 
