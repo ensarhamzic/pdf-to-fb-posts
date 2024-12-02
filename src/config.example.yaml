@@ -1,14 +1,19 @@
-PAGE_ACCESS_TOKEN: "your_page_access_token"
-PAGE_ID: "your_page_id"
-PDF_URL: "https://example.com/sample.pdf"
+# Insert your own values in the following fields
+PAGE_ACCESS_TOKEN: ""
+PAGE_ID: ""
+# No need to change these values
 IMAGES_DIR: "./src/images"
 PDF_DIR: "./src/pdfs"
+# Change the PDF_URL to the URL of the PDF you want to use
+PDF_URL: ""
+# Set the schedule time for each page range, along with the message to be posted.
+# dateTime should be in the format "YYYY-MM-DD HH:MM"
 SCHEDULE_CONFIG:
   - startPage: 1
     endPage: 5
-    message: "Message 1"
-    scheduleTime: 1672531200
+    message: ""
+    dateTime: "2024-12-26 10:00"
   - startPage: 6
     endPage: 10
     message: "Message 2"
-    scheduleTime: 1672534800
+    dateTime: "2024-12-27 11:00"
