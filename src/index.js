@@ -6,7 +6,7 @@ import fs from 'node:fs';
 
 (async () => {
     try {
-        const localPDFPath = path.join(PDF_DIR, 'downloaded.pdf');
+        const localPDFPath = path.join(PDF_DIR, 'downloaded-document.pdf');
         await downloadPdf(PDF_URL, localPDFPath);
 
         for (const config of SCHEDULE_CONFIG) {
