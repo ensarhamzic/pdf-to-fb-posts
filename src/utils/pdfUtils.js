@@ -3,6 +3,7 @@ import path from 'path';
 import axios from 'axios';
 import pdf from 'pdf-poppler';
 import {deleteFolderRecursive} from './fileUtils.js';
+import {IMAGE_QUALITY} from "../infrastructure/variables.js";
 
 export async function downloadPdf(url, outputPath) {
     deleteFolderRecursive(path.dirname(outputPath));
@@ -42,7 +43,7 @@ export async function extractImagesFromPdf(pdfPath, outputDir, startPage, endPag
         format: 'jpeg',
         out_dir: outputDir,
         out_prefix: path.basename(pdfPath, path.extname(pdfPath)),
-        scale: 2048,
+        scale: IMAGE_QUALITY,
     };
 
     for (let page = startPage; page <= endPage; page++) {

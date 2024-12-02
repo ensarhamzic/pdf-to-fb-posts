@@ -4,6 +4,8 @@ PAGE_ID: ""
 # No need to change these values
 IMAGES_DIR: "./src/images"
 PDF_DIR: "./src/pdfs"
+# IMAGE_QUALITY: 1024, 2048, 4096, etc.
+IMAGE_QUALITY: 2048
 # Change the PDF_URL to the URL of the PDF you want to use
 PDF_URL: ""
 # Set the schedule time for each page range, along with the message to be posted.
