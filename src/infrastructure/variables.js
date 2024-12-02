@@ -11,3 +11,5 @@ export const IMAGES_DIR = config.IMAGES_DIR;
 export const PDF_DIR = config.PDF_DIR;
 export const SCHEDULE_CONFIG = config.SCHEDULE_CONFIG;
 export const IMAGE_QUALITY = config.IMAGE_QUALITY;
+export const FB_PHOTOS_ENDPOINT = `https://graph.facebook.com/v21.0/${PAGE_ID}/photos`;
+export const FB_FEED_ENDPOINT = `https://graph.facebook.com/v21.0/${PAGE_ID}/feed`;

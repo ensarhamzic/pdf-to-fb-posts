@@ -1,14 +1,12 @@
 import fs from 'fs';
 import axios from 'axios';
 import FormData from 'form-data';
-import {PAGE_ACCESS_TOKEN, PAGE_ID} from '../infrastructure/variables.js';
+import {PAGE_ACCESS_TOKEN, PAGE_ID, FB_PHOTOS_ENDPOINT, FB_FEED_ENDPOINT} from '../infrastructure/variables.js';
 
 export async function uploadPhoto(photoPath) {
     if (!fs.existsSync(photoPath)) {
         throw new Error(`File not found: ${photoPath}`);
     }
-
-    const url = `https://graph.facebook.com/v21.0/${PAGE_ID}/photos`;
 
     const formData = new FormData();
     formData.append('source', fs.createReadStream(photoPath), {
@@ -18,7 +16,7 @@ export async function uploadPhoto(photoPath) {
     formData.append('published', 'false');
 
     try {
-        const response = await axios.post(url, formData, {
+        const response = await axios.post(FB_PHOTOS_ENDPOINT, formData, {
             headers: {
                 Authorization: `Bearer ${PAGE_ACCESS_TOKEN}`,
                 ...formData.getHeaders(),
@@ -37,8 +35,6 @@ export async function uploadPhoto(photoPath) {
 }
 
 export async function schedulePostWithImages(message, photoIds, scheduleTime) {
-    const url = `https://graph.facebook.com/v21.0/${PAGE_ID}/feed`;
-
     const data = {
         message,
         attached_media: photoIds,
@@ -47,7 +43,7 @@ export async function schedulePostWithImages(message, photoIds, scheduleTime) {
     };
 
     try {
-        const response = await axios.post(url, data, {
+        const response = await axios.post(FB_FEED_ENDPOINT, data, {
             headers: {
                 Authorization: `Bearer ${PAGE_ACCESS_TOKEN}`,
             },
